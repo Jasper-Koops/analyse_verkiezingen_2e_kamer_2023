@@ -36,7 +36,8 @@ Van de 26 stellingen blijven er hierdoor 23 over. Het stemgedrag van Groenlinks 
 ```python
 # Load data and prepare DataFrame for analysis
 check_je_stem_df = pd.read_csv('data/check_je_stem.csv')
-check_je_stem_df = check_je_stem_df.dropna(axis=1)
+check_je_stem_df = check_je_stem_df.drop("BIJ1", axis=1)
+check_je_stem_df = check_je_stem_df.dropna(axis=0)
 check_je_stem_labels = check_je_stem_df.columns[1:]
 check_je_stem_df =check_je_stem_df.iloc[1:]
 check_je_stem_questions = check_je_stem_df["vraag"]
@@ -58,7 +59,7 @@ model.plot()
 ```
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [22] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
@@ -71,7 +72,7 @@ model.plot()
 
 
     (<Figure size 1500x1000 with 1 Axes>,
-     <Axes: title={'center': 'Cumulative explained variance\n 5 Principal Components explain [82.43%] of the variance.'}, xlabel='Principle Component', ylabel='Percentage explained variance'>)
+     <Axes: title={'center': 'Cumulative explained variance\n 5 Principal Components explain [83.54%] of the variance.'}, xlabel='Principle Component', ylabel='Percentage explained variance'>)
 
 
 
@@ -87,20 +88,21 @@ model.plot()
 
 
 ```python
-model = pca(n_components=1)
+model = pca(n_components=2)
 results = model.fit_transform(check_je_stem_prepared, row_labels=check_je_stem_labels)
-model.scatter(legend=False, figsize=(20,4), labels=check_je_stem_labels)
+model.scatter(legend=False, figsize=(20,20), labels=check_je_stem_labels, PC=(0,0), fontsize=16, title="1d Grafiek (diagonaal vanwege leesbaarheid)")
+
 ```
 
     [scatterd] >INFO> Create scatterplot
 
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [22] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
-    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[1]
+    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[2]
     [pca] >Multiple test correction applied for Hotelling T2 test: [fdr_bh]
     [pca] >Outlier detection using SPE/DmodX with n_std=[3]
 
@@ -108,8 +110,8 @@ model.scatter(legend=False, figsize=(20,4), labels=check_je_stem_labels)
 
 
 
-    (<Figure size 2000x400 with 1 Axes>,
-     <Axes: title={'center': '1 Principal Components explain [44.96%] of the variance'}, xlabel='PC1 (44.9% expl.var)', ylabel='PC2 (0% expl.var)'>)
+    (<Figure size 2000x2000 with 1 Axes>,
+     <Axes: title={'center': '1d Grafiek (diagonaal vanwege leesbaarheid)'}, xlabel='PC1 (44.7% expl.var)', ylabel='PC1 (44.7% expl.var)'>)
 
 
 
@@ -132,7 +134,7 @@ model.scatter(legend=False, figsize=(20,20), labels=check_je_stem_labels)
 
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [22] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
@@ -145,13 +147,13 @@ model.scatter(legend=False, figsize=(20,20), labels=check_je_stem_labels)
 
 
     (<Figure size 2000x2000 with 1 Axes>,
-     <Axes: title={'center': '2 Principal Components explain [61.77%] of the variance'}, xlabel='PC1 (44.9% expl.var)', ylabel='PC2 (16.8% expl.var)'>)
+     <Axes: title={'center': '2 Principal Components explain [62.25%] of the variance'}, xlabel='PC1 (44.7% expl.var)', ylabel='PC2 (17.5% expl.var)'>)
 
 
 
 
     
-![png](images/output_11_3.png)
+![png](images/images/output_11_3.png)
     
 
 
@@ -168,7 +170,7 @@ model.scatter3d(legend=False, figsize=(20,20), labels=check_je_stem_labels)
 
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [22] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
@@ -181,7 +183,7 @@ model.scatter3d(legend=False, figsize=(20,20), labels=check_je_stem_labels)
 
 
     (<Figure size 2000x2000 with 1 Axes>,
-     <Axes3D: title={'center': '3 Principal Components explain [71.14%] of the variance'}, xlabel='PC1 (44.9% expl.var)', ylabel='PC2 (16.8% expl.var)', zlabel='PC3 (9.37% expl.var)'>)
+     <Axes3D: title={'center': '3 Principal Components explain [72.95%] of the variance'}, xlabel='PC1 (44.7% expl.var)', ylabel='PC2 (17.5% expl.var)', zlabel='PC3 (10.6% expl.var)'>)
 
 
 
@@ -282,6 +284,7 @@ check_je_stem_df.corr()
       <th>JA21</th>
       <th>CU</th>
       <th>VVD</th>
+      <th>NSC</th>
       <th>CDA</th>
     </tr>
   </thead>
@@ -289,272 +292,306 @@ check_je_stem_df.corr()
     <tr>
       <th>SP</th>
       <td>1.000000</td>
-      <td>0.216841</td>
-      <td>0.342105</td>
-      <td>0.561404</td>
-      <td>-0.164971</td>
-      <td>0.066750</td>
-      <td>0.359025</td>
-      <td>0.445286</td>
-      <td>-0.067925</td>
-      <td>0.417620</td>
-      <td>-0.164971</td>
-      <td>-0.164971</td>
-      <td>0.120756</td>
-      <td>-0.275344</td>
-      <td>-0.359025</td>
+      <td>0.398527</td>
+      <td>0.312500</td>
+      <td>0.541667</td>
+      <td>-0.094356</td>
+      <td>0.019920</td>
+      <td>0.385758</td>
+      <td>4.082483e-01</td>
+      <td>-0.113228</td>
+      <td>0.385758</td>
+      <td>-0.094356</td>
+      <td>-0.149071</td>
+      <td>0.094356</td>
+      <td>-0.312500</td>
+      <td>-0.149071</td>
+      <td>-3.857584e-01</td>
     </tr>
     <tr>
       <th>PVV</th>
-      <td>0.216841</td>
+      <td>0.398527</td>
       <td>1.000000</td>
-      <td>-0.385496</td>
-      <td>-0.184717</td>
-      <td>0.542370</td>
-      <td>0.145144</td>
-      <td>-0.157207</td>
-      <td>-0.262575</td>
-      <td>0.262575</td>
-      <td>-0.286765</td>
-      <td>0.370734</td>
-      <td>0.370734</td>
-      <td>-0.255665</td>
-      <td>0.236814</td>
-      <td>-0.021437</td>
+      <td>-0.332106</td>
+      <td>-0.088561</td>
+      <td>0.431187</td>
+      <td>0.328139</td>
+      <td>-0.184482</td>
+      <td>-1.084652e-01</td>
+      <td>0.451243</td>
+      <td>-0.184482</td>
+      <td>0.210580</td>
+      <td>0.376256</td>
+      <td>-0.210580</td>
+      <td>0.332106</td>
+      <td>0.158424</td>
+      <td>-4.099600e-02</td>
     </tr>
     <tr>
       <th>GL-PvdA</th>
-      <td>0.342105</td>
-      <td>-0.385496</td>
+      <td>0.312500</td>
+      <td>-0.332106</td>
       <td>1.000000</td>
-      <td>0.780702</td>
-      <td>-0.539906</td>
-      <td>-0.350438</td>
-      <td>0.359025</td>
-      <td>0.633967</td>
-      <td>-0.445286</td>
-      <td>0.618399</td>
-      <td>-0.539906</td>
-      <td>-0.539906</td>
-      <td>0.309436</td>
-      <td>-0.483939</td>
-      <td>-0.163903</td>
+      <td>0.770833</td>
+      <td>-0.509525</td>
+      <td>-0.418330</td>
+      <td>0.385758</td>
+      <td>6.123724e-01</td>
+      <td>-0.528396</td>
+      <td>0.597925</td>
+      <td>-0.509525</td>
+      <td>-0.559017</td>
+      <td>0.301941</td>
+      <td>-0.541667</td>
+      <td>-0.354044</td>
+      <td>-1.735913e-01</td>
     </tr>
     <tr>
       <th>Partij voor de Dieren</th>
-      <td>0.561404</td>
-      <td>-0.184717</td>
-      <td>0.780702</td>
+      <td>0.541667</td>
+      <td>-0.088561</td>
+      <td>0.770833</td>
       <td>1.000000</td>
-      <td>-0.352438</td>
-      <td>-0.141844</td>
-      <td>0.359025</td>
-      <td>0.445286</td>
-      <td>-0.445286</td>
-      <td>0.618399</td>
-      <td>-0.352438</td>
-      <td>-0.352438</td>
-      <td>0.120756</td>
-      <td>-0.483939</td>
-      <td>-0.163903</td>
+      <td>-0.301941</td>
+      <td>-0.199205</td>
+      <td>0.385758</td>
+      <td>4.082483e-01</td>
+      <td>-0.528396</td>
+      <td>0.597925</td>
+      <td>-0.301941</td>
+      <td>-0.354044</td>
+      <td>0.094356</td>
+      <td>-0.541667</td>
+      <td>-0.354044</td>
+      <td>-1.735913e-01</td>
     </tr>
     <tr>
       <th>FVD</th>
-      <td>-0.164971</td>
-      <td>0.542370</td>
-      <td>-0.539906</td>
-      <td>-0.352438</td>
+      <td>-0.094356</td>
+      <td>0.431187</td>
+      <td>-0.509525</td>
+      <td>-0.301941</td>
       <td>1.000000</td>
-      <td>0.292440</td>
-      <td>-0.220176</td>
-      <td>-0.529043</td>
-      <td>0.529043</td>
-      <td>-0.659082</td>
-      <td>0.519231</td>
-      <td>0.679487</td>
-      <td>-0.438719</td>
-      <td>0.420828</td>
-      <td>0.220176</td>
+      <td>0.424043</td>
+      <td>-0.244600</td>
+      <td>-4.622502e-01</td>
+      <td>0.692308</td>
+      <td>-0.628971</td>
+      <td>0.435897</td>
+      <td>0.725797</td>
+      <td>-0.435897</td>
+      <td>0.509525</td>
+      <td>0.354459</td>
+      <td>2.445998e-01</td>
     </tr>
     <tr>
       <th>BBB</th>
-      <td>0.066750</td>
-      <td>0.145144</td>
-      <td>-0.350438</td>
-      <td>-0.141844</td>
-      <td>0.292440</td>
+      <td>0.019920</td>
+      <td>0.328139</td>
+      <td>-0.418330</td>
+      <td>-0.199205</td>
+      <td>0.424043</td>
       <td>1.000000</td>
-      <td>0.089087</td>
-      <td>-0.193829</td>
-      <td>0.373300</td>
-      <td>-0.236814</td>
-      <td>0.470757</td>
-      <td>0.470757</td>
-      <td>0.014358</td>
-      <td>0.190476</td>
-      <td>0.467707</td>
+      <td>0.092214</td>
+      <td>-2.927700e-01</td>
+      <td>0.369910</td>
+      <td>-0.313527</td>
+      <td>0.622532</td>
+      <td>0.552340</td>
+      <td>-0.027067</td>
+      <td>0.199205</td>
+      <td>0.748331</td>
+      <td>5.163978e-01</td>
     </tr>
     <tr>
       <th>DENK</th>
-      <td>0.359025</td>
-      <td>-0.157207</td>
-      <td>0.359025</td>
-      <td>0.359025</td>
-      <td>-0.220176</td>
-      <td>0.089087</td>
+      <td>0.385758</td>
+      <td>-0.184482</td>
+      <td>0.385758</td>
+      <td>0.385758</td>
+      <td>-0.244600</td>
+      <td>0.092214</td>
       <td>1.000000</td>
-      <td>0.342475</td>
-      <td>-0.510355</td>
-      <td>0.557370</td>
-      <td>-0.053376</td>
-      <td>-0.220176</td>
-      <td>0.329044</td>
-      <td>-0.460283</td>
-      <td>-0.131944</td>
+      <td>3.779645e-01</td>
+      <td>-0.524142</td>
+      <td>0.607143</td>
+      <td>-0.052414</td>
+      <td>-0.310530</td>
+      <td>0.244600</td>
+      <td>-0.597925</td>
+      <td>-0.120761</td>
+      <td>-2.142857e-01</td>
     </tr>
     <tr>
       <th>D66</th>
-      <td>0.445286</td>
-      <td>-0.262575</td>
-      <td>0.633967</td>
-      <td>0.445286</td>
-      <td>-0.529043</td>
-      <td>-0.193829</td>
-      <td>0.342475</td>
-      <td>1.000000</td>
-      <td>-0.350649</td>
-      <td>0.601159</td>
-      <td>-0.367750</td>
-      <td>-0.529043</td>
-      <td>0.623377</td>
-      <td>-0.344584</td>
-      <td>-0.006715</td>
+      <td>0.408248</td>
+      <td>-0.108465</td>
+      <td>0.612372</td>
+      <td>0.408248</td>
+      <td>-0.462250</td>
+      <td>-0.292770</td>
+      <td>0.377964</td>
+      <td>1.000000e+00</td>
+      <td>-0.462250</td>
+      <td>0.566947</td>
+      <td>-0.277350</td>
+      <td>-0.547723</td>
+      <td>0.647150</td>
+      <td>-0.408248</td>
+      <td>-0.182574</td>
+      <td>1.573593e-17</td>
     </tr>
     <tr>
       <th>BVNL</th>
-      <td>-0.067925</td>
-      <td>0.262575</td>
-      <td>-0.445286</td>
-      <td>-0.445286</td>
-      <td>0.529043</td>
-      <td>0.373300</td>
-      <td>-0.510355</td>
-      <td>-0.350649</td>
+      <td>-0.113228</td>
+      <td>0.451243</td>
+      <td>-0.528396</td>
+      <td>-0.528396</td>
+      <td>0.692308</td>
+      <td>0.369910</td>
+      <td>-0.524142</td>
+      <td>-4.622502e-01</td>
       <td>1.000000</td>
-      <td>-0.601159</td>
-      <td>0.206456</td>
-      <td>0.529043</td>
-      <td>-0.298701</td>
-      <td>0.524055</td>
-      <td>0.174595</td>
+      <td>-0.716328</td>
+      <td>0.316239</td>
+      <td>0.573886</td>
+      <td>-0.316239</td>
+      <td>0.528396</td>
+      <td>0.388217</td>
+      <td>1.397713e-01</td>
     </tr>
     <tr>
       <th>VOLT</th>
-      <td>0.417620</td>
-      <td>-0.286765</td>
-      <td>0.618399</td>
-      <td>0.618399</td>
-      <td>-0.659082</td>
-      <td>-0.236814</td>
-      <td>0.557370</td>
-      <td>0.601159</td>
-      <td>-0.601159</td>
+      <td>0.385758</td>
+      <td>-0.184482</td>
+      <td>0.597925</td>
+      <td>0.597925</td>
+      <td>-0.628971</td>
+      <td>-0.313527</td>
+      <td>0.607143</td>
+      <td>5.669467e-01</td>
+      <td>-0.716328</td>
       <td>1.000000</td>
-      <td>-0.487446</td>
-      <td>-0.659082</td>
-      <td>0.262575</td>
-      <td>-0.527102</td>
-      <td>-0.378726</td>
+      <td>-0.436785</td>
+      <td>-0.690066</td>
+      <td>0.244600</td>
+      <td>-0.597925</td>
+      <td>-0.500298</td>
+      <td>-4.107143e-01</td>
     </tr>
     <tr>
       <th>SGP</th>
-      <td>-0.164971</td>
-      <td>0.370734</td>
-      <td>-0.539906</td>
-      <td>-0.352438</td>
-      <td>0.519231</td>
-      <td>0.470757</td>
-      <td>-0.053376</td>
-      <td>-0.367750</td>
-      <td>0.206456</td>
-      <td>-0.487446</td>
+      <td>-0.094356</td>
+      <td>0.210580</td>
+      <td>-0.509525</td>
+      <td>-0.301941</td>
+      <td>0.435897</td>
+      <td>0.622532</td>
+      <td>-0.052414</td>
+      <td>-2.773501e-01</td>
+      <td>0.316239</td>
+      <td>-0.436785</td>
       <td>1.000000</td>
-      <td>0.679487</td>
-      <td>0.045162</td>
-      <td>0.242511</td>
-      <td>0.386976</td>
+      <td>0.725797</td>
+      <td>0.128205</td>
+      <td>0.301941</td>
+      <td>0.725797</td>
+      <td>4.367853e-01</td>
     </tr>
     <tr>
       <th>JA21</th>
-      <td>-0.164971</td>
-      <td>0.370734</td>
-      <td>-0.539906</td>
-      <td>-0.352438</td>
-      <td>0.679487</td>
-      <td>0.470757</td>
-      <td>-0.220176</td>
-      <td>-0.529043</td>
-      <td>0.529043</td>
-      <td>-0.659082</td>
-      <td>0.679487</td>
+      <td>-0.149071</td>
+      <td>0.376256</td>
+      <td>-0.559017</td>
+      <td>-0.354044</td>
+      <td>0.725797</td>
+      <td>0.552340</td>
+      <td>-0.310530</td>
+      <td>-5.477226e-01</td>
+      <td>0.573886</td>
+      <td>-0.690066</td>
+      <td>0.725797</td>
       <td>1.000000</td>
-      <td>-0.116131</td>
-      <td>0.599145</td>
-      <td>0.553777</td>
+      <td>-0.168790</td>
+      <td>0.559017</td>
+      <td>0.633333</td>
+      <td>5.002975e-01</td>
     </tr>
     <tr>
       <th>CU</th>
-      <td>0.120756</td>
-      <td>-0.255665</td>
-      <td>0.309436</td>
-      <td>0.120756</td>
-      <td>-0.438719</td>
-      <td>0.014358</td>
-      <td>0.329044</td>
-      <td>0.623377</td>
-      <td>-0.298701</td>
-      <td>0.262575</td>
-      <td>0.045162</td>
-      <td>-0.116131</td>
+      <td>0.094356</td>
+      <td>-0.210580</td>
+      <td>0.301941</td>
+      <td>0.094356</td>
+      <td>-0.435897</td>
+      <td>-0.027067</td>
+      <td>0.244600</td>
+      <td>6.471502e-01</td>
+      <td>-0.316239</td>
+      <td>0.244600</td>
+      <td>0.128205</td>
+      <td>-0.168790</td>
       <td>1.000000</td>
-      <td>-0.014358</td>
-      <td>0.342475</td>
+      <td>-0.094356</td>
+      <td>0.202548</td>
+      <td>3.319569e-01</td>
     </tr>
     <tr>
       <th>VVD</th>
-      <td>-0.275344</td>
-      <td>0.236814</td>
-      <td>-0.483939</td>
-      <td>-0.483939</td>
-      <td>0.420828</td>
-      <td>0.190476</td>
-      <td>-0.460283</td>
-      <td>-0.344584</td>
-      <td>0.524055</td>
-      <td>-0.527102</td>
-      <td>0.242511</td>
-      <td>0.599145</td>
-      <td>-0.014358</td>
+      <td>-0.312500</td>
+      <td>0.332106</td>
+      <td>-0.541667</td>
+      <td>-0.541667</td>
+      <td>0.509525</td>
+      <td>0.199205</td>
+      <td>-0.597925</td>
+      <td>-4.082483e-01</td>
+      <td>0.528396</td>
+      <td>-0.597925</td>
+      <td>0.301941</td>
+      <td>0.559017</td>
+      <td>-0.094356</td>
       <td>1.000000</td>
-      <td>0.460283</td>
+      <td>0.354044</td>
+      <td>3.857584e-01</td>
+    </tr>
+    <tr>
+      <th>NSC</th>
+      <td>-0.149071</td>
+      <td>0.158424</td>
+      <td>-0.354044</td>
+      <td>-0.354044</td>
+      <td>0.354459</td>
+      <td>0.748331</td>
+      <td>-0.120761</td>
+      <td>-1.825742e-01</td>
+      <td>0.388217</td>
+      <td>-0.500298</td>
+      <td>0.725797</td>
+      <td>0.633333</td>
+      <td>0.202548</td>
+      <td>0.354044</td>
+      <td>1.000000</td>
+      <td>6.900656e-01</td>
     </tr>
     <tr>
       <th>CDA</th>
-      <td>-0.359025</td>
-      <td>-0.021437</td>
-      <td>-0.163903</td>
-      <td>-0.163903</td>
-      <td>0.220176</td>
-      <td>0.467707</td>
-      <td>-0.131944</td>
-      <td>-0.006715</td>
-      <td>0.174595</td>
-      <td>-0.378726</td>
-      <td>0.386976</td>
-      <td>0.553777</td>
-      <td>0.342475</td>
-      <td>0.460283</td>
-      <td>1.000000</td>
+      <td>-0.385758</td>
+      <td>-0.040996</td>
+      <td>-0.173591</td>
+      <td>-0.173591</td>
+      <td>0.244600</td>
+      <td>0.516398</td>
+      <td>-0.214286</td>
+      <td>1.573593e-17</td>
+      <td>0.139771</td>
+      <td>-0.410714</td>
+      <td>0.436785</td>
+      <td>0.500298</td>
+      <td>0.331957</td>
+      <td>0.385758</td>
+      <td>0.690066</td>
+      <td>1.000000e+00</td>
     </tr>
   </tbody>
 </table>
@@ -621,9 +658,9 @@ model.plot()
 
 
 ```python
-model = pca(n_components=1)
+model = pca(n_components=2)
 results = model.fit_transform(stemwijzer_df_prepared, row_labels=stemwijzer_labels)
-model.scatter(legend=False, figsize=(20,4), labels=stemwijzer_labels)
+model.scatter(legend=False, figsize=(20,20), labels=stemwijzer_labels, PC=(0,0), fontsize=16, title="1d Grafiek (diagonaal vanwege leesbaarheid)")
 ```
 
     [scatterd] >INFO> Create scatterplot
@@ -634,7 +671,7 @@ model.scatter(legend=False, figsize=(20,4), labels=stemwijzer_labels)
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
-    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[1]
+    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[2]
     [pca] >Multiple test correction applied for Hotelling T2 test: [fdr_bh]
     [pca] >Outlier detection using SPE/DmodX with n_std=[3]
 
@@ -642,8 +679,8 @@ model.scatter(legend=False, figsize=(20,4), labels=stemwijzer_labels)
 
 
 
-    (<Figure size 2000x400 with 1 Axes>,
-     <Axes: title={'center': '1 Principal Components explain [34.83%] of the variance'}, xlabel='PC1 (34.8% expl.var)', ylabel='PC2 (0% expl.var)'>)
+    (<Figure size 2000x2000 with 1 Axes>,
+     <Axes: title={'center': '1d Grafiek (diagonaal vanwege leesbaarheid)'}, xlabel='PC1 (34.8% expl.var)', ylabel='PC1 (34.8% expl.var)'>)
 
 
 
@@ -662,9 +699,6 @@ results = model.fit_transform(stemwijzer_df_prepared, row_labels=stemwijzer_labe
 model.scatter(legend=False, figsize=(20,20), labels=stemwijzer_labels)
 ```
 
-    [scatterd] >INFO> Create scatterplot
-
-
     [pca] >Extracting column labels from dataframe.
     [pca] >The PCA reduction is performed on the [29] columns of the input dataframe.
     [pca] >Fit using PCA.
@@ -673,6 +707,9 @@ model.scatter(legend=False, figsize=(20,20), labels=stemwijzer_labels)
     [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[2]
     [pca] >Multiple test correction applied for Hotelling T2 test: [fdr_bh]
     [pca] >Outlier detection using SPE/DmodX with n_std=[3]
+
+
+    [scatterd] >INFO> Create scatterplot
 
 
 
@@ -737,7 +774,7 @@ component_df.plot.barh(ax=ax)
 fig.tight_layout()
 ```
 
-    /tmp/ipykernel_429372/279368595.py:4: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
+    /tmp/ipykernel_13280/279368595.py:4: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
       fig.tight_layout()
 
 
@@ -755,7 +792,7 @@ component_df.plot.barh(ax=ax)
 fig.tight_layout()
 ```
 
-    /tmp/ipykernel_429372/845681879.py:4: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
+    /tmp/ipykernel_13280/845681879.py:4: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
       fig.tight_layout()
 
 
@@ -1192,7 +1229,8 @@ Het stemgedrag van Groenlinks en de PvdA had 100% overlap en zijn daarom samenge
 ```python
 # Load data and prepare DataFrame for analysis
 stemmen_tracker_df = pd.read_csv('data/stemmentracker.csv')
-stemmen_tracker_df = stemmen_tracker_df.dropna(axis=1)
+stemmen_tracker_df = stemmen_tracker_df.drop("BIJ1", axis=1)
+stemmen_tracker_df = stemmen_tracker_df.dropna(axis=0)
 stemmen_tracker_labels = stemmen_tracker_df.columns[1:]
 stemmen_tracker_df =stemmen_tracker_df.iloc[1:]
 stemmen_tracker_questions = stemmen_tracker_df["Motie"]
@@ -1214,7 +1252,7 @@ model.plot()
 ```
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [29] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
@@ -1227,7 +1265,7 @@ model.plot()
 
 
     (<Figure size 1500x1000 with 1 Axes>,
-     <Axes: title={'center': 'Cumulative explained variance\n 5 Principal Components explain [79.94%] of the variance.'}, xlabel='Principle Component', ylabel='Percentage explained variance'>)
+     <Axes: title={'center': 'Cumulative explained variance\n 5 Principal Components explain [79.57%] of the variance.'}, xlabel='Principle Component', ylabel='Percentage explained variance'>)
 
 
 
@@ -1243,29 +1281,30 @@ model.plot()
 
 
 ```python
-model = pca(n_components=1)
+model = pca(n_components=2)
 results = model.fit_transform(stemmen_tracker_df_prepared, row_labels=stemmen_tracker_labels)
-model.scatter(legend=False, figsize=(20,4), labels=stemmen_tracker_labels)
+model.scatter(legend=False, figsize=(20,20), labels=stemmen_tracker_labels, PC=(0,0), fontsize=16, title="1d Grafiek (diagonaal vanwege leesbaarheid)")
+
 ```
-
-    [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [29] columns of the input dataframe.
-    [pca] >Fit using PCA.
-    [pca] >Compute loadings and PCs.
-    [pca] >Compute explained variance.
-    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[1]
-    [pca] >Multiple test correction applied for Hotelling T2 test: [fdr_bh]
-    [pca] >Outlier detection using SPE/DmodX with n_std=[3]
-
 
     [scatterd] >INFO> Create scatterplot
 
 
+    [pca] >Extracting column labels from dataframe.
+    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
+    [pca] >Fit using PCA.
+    [pca] >Compute loadings and PCs.
+    [pca] >Compute explained variance.
+    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[2]
+    [pca] >Multiple test correction applied for Hotelling T2 test: [fdr_bh]
+    [pca] >Outlier detection using SPE/DmodX with n_std=[3]
 
 
 
-    (<Figure size 2000x400 with 1 Axes>,
-     <Axes: title={'center': '1 Principal Components explain [36.49%] of the variance'}, xlabel='PC1 (36.4% expl.var)', ylabel='PC2 (0% expl.var)'>)
+
+
+    (<Figure size 2000x2000 with 1 Axes>,
+     <Axes: title={'center': '1d Grafiek (diagonaal vanwege leesbaarheid)'}, xlabel='PC1 (35.6% expl.var)', ylabel='PC1 (35.6% expl.var)'>)
 
 
 
@@ -1288,7 +1327,7 @@ model.scatter(legend=False, figsize=(20,20), labels=stemmen_tracker_labels)
 
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [29] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
@@ -1301,7 +1340,7 @@ model.scatter(legend=False, figsize=(20,20), labels=stemmen_tracker_labels)
 
 
     (<Figure size 2000x2000 with 1 Axes>,
-     <Axes: title={'center': '2 Principal Components explain [58.45%] of the variance'}, xlabel='PC1 (36.4% expl.var)', ylabel='PC2 (21.9% expl.var)'>)
+     <Axes: title={'center': '2 Principal Components explain [56.14%] of the variance'}, xlabel='PC1 (35.6% expl.var)', ylabel='PC2 (20.4% expl.var)'>)
 
 
 
@@ -1321,7 +1360,7 @@ model.scatter3d(legend=False, figsize=(20,20), labels=stemmen_tracker_labels)
 ```
 
     [pca] >Extracting column labels from dataframe.
-    [pca] >The PCA reduction is performed on the [29] columns of the input dataframe.
+    [pca] >The PCA reduction is performed on the [25] columns of the input dataframe.
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
@@ -1337,7 +1376,7 @@ model.scatter3d(legend=False, figsize=(20,20), labels=stemmen_tracker_labels)
 
 
     (<Figure size 2000x2000 with 1 Axes>,
-     <Axes3D: title={'center': '3 Principal Components explain [68.44%] of the variance'}, xlabel='PC1 (36.4% expl.var)', ylabel='PC2 (21.9% expl.var)', zlabel='PC3 (9.98% expl.var)'>)
+     <Axes3D: title={'center': '3 Principal Components explain [67.78%] of the variance'}, xlabel='PC1 (35.6% expl.var)', ylabel='PC2 (20.4% expl.var)', zlabel='PC3 (11.6% expl.var)'>)
 
 
 
@@ -1439,277 +1478,312 @@ stemmen_tracker_df.corr()
       <th>SGP</th>
       <th>DENK</th>
       <th>VOLT</th>
+      <th>NSC</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>PVV</th>
       <td>1.000000</td>
-      <td>0.513088</td>
-      <td>0.421586</td>
-      <td>0.526134</td>
-      <td>0.297406</td>
-      <td>-0.030934</td>
-      <td>-0.221332</td>
-      <td>0.016222</td>
-      <td>-0.068421</td>
-      <td>-0.362180</td>
-      <td>-0.170213</td>
-      <td>-0.180451</td>
-      <td>0.170213</td>
-      <td>0.030934</td>
-      <td>-0.410513</td>
+      <td>0.510355</td>
+      <td>0.479167</td>
+      <td>0.557370</td>
+      <td>0.378726</td>
+      <td>-0.068041</td>
+      <td>-0.113424</td>
+      <td>0.041667</td>
+      <td>-0.041667</td>
+      <td>-0.329044</td>
+      <td>-0.113424</td>
+      <td>-0.068041</td>
+      <td>0.174595</td>
+      <td>0.131944</td>
+      <td>-0.386976</td>
+      <td>0.174595</td>
     </tr>
     <tr>
       <th>FVD</th>
-      <td>0.513088</td>
+      <td>0.510355</td>
       <td>1.000000</td>
-      <td>0.509733</td>
-      <td>0.374465</td>
-      <td>0.744208</td>
-      <td>-0.009855</td>
-      <td>-0.442308</td>
-      <td>-0.144707</td>
-      <td>-0.216302</td>
-      <td>-0.394231</td>
-      <td>-0.239237</td>
-      <td>-0.438557</td>
-      <td>-0.038278</td>
-      <td>-0.133045</td>
-      <td>-0.454551</td>
+      <td>0.510355</td>
+      <td>0.428412</td>
+      <td>0.773906</td>
+      <td>-0.098693</td>
+      <td>-0.438719</td>
+      <td>-0.174595</td>
+      <td>-0.161165</td>
+      <td>-0.461039</td>
+      <td>-0.277425</td>
+      <td>-0.427669</td>
+      <td>-0.136364</td>
+      <td>-0.161165</td>
+      <td>-0.529043</td>
+      <td>-0.136364</td>
     </tr>
     <tr>
       <th>JA21</th>
-      <td>0.421586</td>
-      <td>0.509733</td>
+      <td>0.479167</td>
+      <td>0.510355</td>
       <td>1.000000</td>
-      <td>0.264683</td>
-      <td>0.495761</td>
-      <td>0.079611</td>
-      <td>-0.368949</td>
-      <td>0.109589</td>
-      <td>-0.314920</td>
-      <td>-0.616534</td>
-      <td>-0.449323</td>
-      <td>-0.208979</td>
-      <td>0.309211</td>
-      <td>-0.223906</td>
-      <td>-0.531457</td>
+      <td>0.378726</td>
+      <td>0.557370</td>
+      <td>-0.068041</td>
+      <td>-0.447024</td>
+      <td>0.041667</td>
+      <td>-0.215278</td>
+      <td>-0.664804</td>
+      <td>-0.447024</td>
+      <td>-0.238145</td>
+      <td>0.174595</td>
+      <td>-0.215278</td>
+      <td>-0.553777</td>
+      <td>0.174595</td>
     </tr>
     <tr>
       <th>BBB</th>
-      <td>0.526134</td>
-      <td>0.374465</td>
-      <td>0.264683</td>
+      <td>0.557370</td>
+      <td>0.428412</td>
+      <td>0.378726</td>
       <td>1.000000</td>
-      <td>0.253024</td>
-      <td>-0.153522</td>
-      <td>-0.219330</td>
-      <td>0.080508</td>
-      <td>0.201498</td>
-      <td>-0.246077</td>
-      <td>-0.175691</td>
-      <td>0.005483</td>
-      <td>0.175691</td>
-      <td>-0.005483</td>
-      <td>-0.133099</td>
+      <td>0.264706</td>
+      <td>-0.140028</td>
+      <td>-0.199098</td>
+      <td>0.157207</td>
+      <td>0.200082</td>
+      <td>-0.262575</td>
+      <td>-0.199098</td>
+      <td>0.035007</td>
+      <td>0.255665</td>
+      <td>0.021437</td>
+      <td>-0.144174</td>
+      <td>0.428412</td>
     </tr>
     <tr>
       <th>BVNL</th>
-      <td>0.297406</td>
-      <td>0.744208</td>
-      <td>0.495761</td>
-      <td>0.253024</td>
+      <td>0.378726</td>
+      <td>0.773906</td>
+      <td>0.557370</td>
+      <td>0.264706</td>
       <td>1.000000</td>
-      <td>0.063564</td>
-      <td>-0.294582</td>
-      <td>-0.355556</td>
-      <td>-0.016222</td>
-      <td>-0.304919</td>
-      <td>-0.097725</td>
-      <td>-0.550889</td>
-      <td>-0.200594</td>
-      <td>-0.063564</td>
-      <td>-0.200594</td>
+      <td>0.035007</td>
+      <td>-0.370734</td>
+      <td>-0.378726</td>
+      <td>0.021437</td>
+      <td>-0.435322</td>
+      <td>-0.199098</td>
+      <td>-0.665133</td>
+      <td>-0.262575</td>
+      <td>-0.157207</td>
+      <td>-0.315810</td>
+      <td>-0.262575</td>
     </tr>
     <tr>
       <th>VVD</th>
-      <td>-0.030934</td>
-      <td>-0.009855</td>
-      <td>0.079611</td>
-      <td>-0.153522</td>
-      <td>0.063564</td>
+      <td>-0.068041</td>
+      <td>-0.098693</td>
+      <td>-0.068041</td>
+      <td>-0.140028</td>
+      <td>0.035007</td>
       <td>1.000000</td>
-      <td>0.295656</td>
-      <td>0.550889</td>
-      <td>-0.030934</td>
-      <td>-0.009855</td>
-      <td>-0.186355</td>
-      <td>0.267677</td>
-      <td>0.186355</td>
-      <td>-0.121212</td>
-      <td>0.044137</td>
+      <td>0.359546</td>
+      <td>0.578352</td>
+      <td>0.102062</td>
+      <td>0.065795</td>
+      <td>-0.130744</td>
+      <td>0.333333</td>
+      <td>0.065795</td>
+      <td>-0.068041</td>
+      <td>0.130744</td>
+      <td>0.065795</td>
     </tr>
     <tr>
       <th>D66</th>
-      <td>-0.221332</td>
-      <td>-0.442308</td>
-      <td>-0.368949</td>
-      <td>-0.219330</td>
-      <td>-0.294582</td>
-      <td>0.295656</td>
+      <td>-0.113424</td>
+      <td>-0.438719</td>
+      <td>-0.447024</td>
+      <td>-0.199098</td>
+      <td>-0.370734</td>
+      <td>0.359546</td>
       <td>1.000000</td>
-      <td>0.294582</td>
-      <td>0.362180</td>
-      <td>0.673077</td>
-      <td>0.516752</td>
-      <td>0.581457</td>
-      <td>0.038278</td>
-      <td>0.275946</td>
-      <td>0.593308</td>
+      <td>0.280224</td>
+      <td>0.386976</td>
+      <td>0.690337</td>
+      <td>0.519231</td>
+      <td>0.522976</td>
+      <td>0.045162</td>
+      <td>0.220176</td>
+      <td>0.602564</td>
+      <td>0.206456</td>
     </tr>
     <tr>
       <th>CDA</th>
-      <td>0.016222</td>
-      <td>-0.144707</td>
-      <td>0.109589</td>
-      <td>0.080508</td>
-      <td>-0.355556</td>
-      <td>0.550889</td>
-      <td>0.294582</td>
+      <td>0.041667</td>
+      <td>-0.174595</td>
+      <td>0.041667</td>
+      <td>0.157207</td>
+      <td>-0.378726</td>
+      <td>0.578352</td>
+      <td>0.280224</td>
       <td>1.000000</td>
-      <td>0.016222</td>
-      <td>0.005168</td>
-      <td>-0.200594</td>
-      <td>0.704503</td>
-      <td>0.498914</td>
-      <td>0.063564</td>
-      <td>0.051434</td>
+      <td>0.041667</td>
+      <td>-0.006715</td>
+      <td>-0.220176</td>
+      <td>0.748455</td>
+      <td>0.496924</td>
+      <td>0.041667</td>
+      <td>0.053376</td>
+      <td>0.496924</td>
     </tr>
     <tr>
       <th>SP</th>
-      <td>-0.068421</td>
-      <td>-0.216302</td>
-      <td>-0.314920</td>
-      <td>0.201498</td>
-      <td>-0.016222</td>
-      <td>-0.030934</td>
-      <td>0.362180</td>
-      <td>0.016222</td>
+      <td>-0.041667</td>
+      <td>-0.161165</td>
+      <td>-0.215278</td>
+      <td>0.200082</td>
+      <td>0.021437</td>
+      <td>0.102062</td>
+      <td>0.386976</td>
+      <td>0.041667</td>
       <td>1.000000</td>
-      <td>0.513088</td>
-      <td>0.410513</td>
-      <td>0.118582</td>
-      <td>0.025031</td>
-      <td>0.329967</td>
-      <td>0.460576</td>
+      <td>0.510355</td>
+      <td>0.386976</td>
+      <td>0.102062</td>
+      <td>0.174595</td>
+      <td>0.305556</td>
+      <td>0.447024</td>
+      <td>0.342475</td>
     </tr>
     <tr>
       <th>GL-PvdA</th>
-      <td>-0.362180</td>
-      <td>-0.394231</td>
-      <td>-0.616534</td>
-      <td>-0.246077</td>
-      <td>-0.304919</td>
-      <td>-0.009855</td>
-      <td>0.673077</td>
-      <td>0.005168</td>
-      <td>0.513088</td>
+      <td>-0.329044</td>
+      <td>-0.461039</td>
+      <td>-0.664804</td>
+      <td>-0.262575</td>
+      <td>-0.435322</td>
+      <td>0.065795</td>
+      <td>0.690337</td>
+      <td>-0.006715</td>
+      <td>0.510355</td>
       <td>1.000000</td>
-      <td>0.732066</td>
-      <td>0.275946</td>
-      <td>-0.177036</td>
-      <td>0.438557</td>
-      <td>0.655510</td>
+      <td>0.690337</td>
+      <td>0.230283</td>
+      <td>-0.136364</td>
+      <td>0.342475</td>
+      <td>0.600012</td>
+      <td>0.025974</td>
     </tr>
     <tr>
       <th>Partij voor de Dieren</th>
-      <td>-0.170213</td>
-      <td>-0.239237</td>
-      <td>-0.449323</td>
-      <td>-0.175691</td>
-      <td>-0.097725</td>
-      <td>-0.186355</td>
-      <td>0.516752</td>
-      <td>-0.200594</td>
-      <td>0.410513</td>
-      <td>0.732066</td>
+      <td>-0.113424</td>
+      <td>-0.277425</td>
+      <td>-0.447024</td>
+      <td>-0.199098</td>
+      <td>-0.199098</td>
+      <td>-0.130744</td>
+      <td>0.519231</td>
+      <td>-0.220176</td>
+      <td>0.386976</td>
+      <td>0.690337</td>
       <td>1.000000</td>
-      <td>0.098082</td>
-      <td>-0.171429</td>
-      <td>0.470792</td>
-      <td>0.657143</td>
+      <td>0.032686</td>
+      <td>-0.116131</td>
+      <td>0.386976</td>
+      <td>0.602564</td>
+      <td>0.045162</td>
     </tr>
     <tr>
       <th>CU</th>
-      <td>-0.180451</td>
-      <td>-0.438557</td>
-      <td>-0.208979</td>
-      <td>0.005483</td>
-      <td>-0.550889</td>
-      <td>0.267677</td>
-      <td>0.581457</td>
-      <td>0.704503</td>
-      <td>0.118582</td>
-      <td>0.275946</td>
-      <td>0.098082</td>
+      <td>-0.068041</td>
+      <td>-0.427669</td>
+      <td>-0.238145</td>
+      <td>0.035007</td>
+      <td>-0.665133</td>
+      <td>0.333333</td>
+      <td>0.522976</td>
+      <td>0.748455</td>
+      <td>0.102062</td>
+      <td>0.230283</td>
+      <td>0.032686</td>
       <td>1.000000</td>
-      <td>0.470792</td>
-      <td>0.318182</td>
-      <td>0.328574</td>
+      <td>0.559259</td>
+      <td>0.272166</td>
+      <td>0.294174</td>
+      <td>0.559259</td>
     </tr>
     <tr>
       <th>SGP</th>
-      <td>0.170213</td>
-      <td>-0.038278</td>
-      <td>0.309211</td>
-      <td>0.175691</td>
-      <td>-0.200594</td>
-      <td>0.186355</td>
-      <td>0.038278</td>
-      <td>0.498914</td>
-      <td>0.025031</td>
-      <td>-0.177036</td>
-      <td>-0.171429</td>
-      <td>0.470792</td>
+      <td>0.174595</td>
+      <td>-0.136364</td>
+      <td>0.174595</td>
+      <td>0.255665</td>
+      <td>-0.262575</td>
+      <td>0.065795</td>
+      <td>0.045162</td>
+      <td>0.496924</td>
+      <td>0.174595</td>
+      <td>-0.136364</td>
+      <td>-0.116131</td>
+      <td>0.559259</td>
       <td>1.000000</td>
-      <td>-0.044137</td>
-      <td>0.033333</td>
+      <td>0.006715</td>
+      <td>0.116131</td>
+      <td>0.675325</td>
     </tr>
     <tr>
       <th>DENK</th>
-      <td>0.030934</td>
-      <td>-0.133045</td>
-      <td>-0.223906</td>
-      <td>-0.005483</td>
-      <td>-0.063564</td>
-      <td>-0.121212</td>
-      <td>0.275946</td>
-      <td>0.063564</td>
-      <td>0.329967</td>
-      <td>0.438557</td>
-      <td>0.470792</td>
-      <td>0.318182</td>
-      <td>-0.044137</td>
+      <td>0.131944</td>
+      <td>-0.161165</td>
+      <td>-0.215278</td>
+      <td>0.021437</td>
+      <td>-0.157207</td>
+      <td>-0.068041</td>
+      <td>0.220176</td>
+      <td>0.041667</td>
+      <td>0.305556</td>
+      <td>0.342475</td>
+      <td>0.386976</td>
+      <td>0.272166</td>
+      <td>0.006715</td>
       <td>1.000000</td>
-      <td>0.382518</td>
+      <td>0.280224</td>
+      <td>0.006715</td>
     </tr>
     <tr>
       <th>VOLT</th>
-      <td>-0.410513</td>
-      <td>-0.454551</td>
-      <td>-0.531457</td>
-      <td>-0.133099</td>
-      <td>-0.200594</td>
-      <td>0.044137</td>
-      <td>0.593308</td>
-      <td>0.051434</td>
-      <td>0.460576</td>
-      <td>0.655510</td>
-      <td>0.657143</td>
-      <td>0.328574</td>
-      <td>0.033333</td>
-      <td>0.382518</td>
+      <td>-0.386976</td>
+      <td>-0.529043</td>
+      <td>-0.553777</td>
+      <td>-0.144174</td>
+      <td>-0.315810</td>
+      <td>0.130744</td>
+      <td>0.602564</td>
+      <td>0.053376</td>
+      <td>0.447024</td>
+      <td>0.600012</td>
+      <td>0.602564</td>
+      <td>0.294174</td>
+      <td>0.116131</td>
+      <td>0.280224</td>
+      <td>1.000000</td>
+      <td>0.116131</td>
+    </tr>
+    <tr>
+      <th>NSC</th>
+      <td>0.174595</td>
+      <td>-0.136364</td>
+      <td>0.174595</td>
+      <td>0.428412</td>
+      <td>-0.262575</td>
+      <td>0.065795</td>
+      <td>0.206456</td>
+      <td>0.496924</td>
+      <td>0.342475</td>
+      <td>0.025974</td>
+      <td>0.045162</td>
+      <td>0.559259</td>
+      <td>0.675325</td>
+      <td>0.006715</td>
+      <td>0.116131</td>
       <td>1.000000</td>
     </tr>
   </tbody>
@@ -1779,9 +1853,9 @@ model.plot()
 
 
 ```python
-model = pca(n_components=1)
+model = pca(n_components=2)
 results = model.fit_transform(kieskompas_df_prepared, row_labels=kieskompas_df_labels)
-model.scatter(legend=1, figsize=(20,4), labels=kieskompas_df_labels)
+model.scatter(legend=False, figsize=(20,20), labels=kieskompas_df_labels, PC=(0,0), fontsize=16, title="1d Grafiek (diagonaal vanwege leesbaarheid)")
 ```
 
     [scatterd] >INFO> Create scatterplot
@@ -1792,7 +1866,7 @@ model.scatter(legend=1, figsize=(20,4), labels=kieskompas_df_labels)
     [pca] >Fit using PCA.
     [pca] >Compute loadings and PCs.
     [pca] >Compute explained variance.
-    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[1]
+    [pca] >Outlier detection using Hotelling T2 test with alpha=[0.05] and n_components=[2]
     [pca] >Multiple test correction applied for Hotelling T2 test: [fdr_bh]
     [pca] >Outlier detection using SPE/DmodX with n_std=[3]
 
@@ -1800,8 +1874,8 @@ model.scatter(legend=1, figsize=(20,4), labels=kieskompas_df_labels)
 
 
 
-    (<Figure size 2000x400 with 1 Axes>,
-     <Axes: title={'center': '1 Principal Components explain [67.37%] of the variance'}, xlabel='PC1 (67.3% expl.var)', ylabel='PC2 (0% expl.var)'>)
+    (<Figure size 2000x2000 with 1 Axes>,
+     <Axes: title={'center': '1d Grafiek (diagonaal vanwege leesbaarheid)'}, xlabel='PC1 (67.3% expl.var)', ylabel='PC1 (67.3% expl.var)'>)
 
 
 
