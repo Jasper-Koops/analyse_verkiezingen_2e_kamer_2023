@@ -153,7 +153,7 @@ model.scatter(legend=False, figsize=(20,20), labels=check_je_stem_labels)
 
 
     
-![png](images/images/output_11_3.png)
+![png](images/output_11_3.png)
     
 
 
